@@ -1,33 +1,51 @@
 package models
 
-import "time"
+import (
+	"database/sql"
+	"time"
+)
 
+// Models is the wrapper for database
+type Models struct {
+	DB DBModel
+}
+
+// NewModels returns models with db pool
+func NewModels(db *sql.DB) Models {
+	return Models{
+		DB: DBModel{DB: db},
+	}
+}
+
+// Movie is the type for movies
 type Movie struct {
-	Id          int          `json:"id"`
-	Title       string       `json:"title"`
-	Description string       `json:"descrition"`
-	Year        int          `json:"year"`
-	ReleaseDate time.Time    `json:"release_date"`
-	Runtime     int          `json:"runtime"`
-	Rating      int          `json:"rating"`
-	MPAARating  string       `json:"mpaa_rating"`
-	CreatedAt   time.Time    `json:"created_at"`
-	UpdatedAt   time.Time    `json:"update_at"`
-	MovieGenre  []MovieGenre `json:"-"`
+	ID          int            `json:"id"`
+	Title       string         `json:"title"`
+	Description string         `json:"description"`
+	Year        int            `json:"year"`
+	ReleaseDate time.Time      `json:"release_date"`
+	Runtime     int            `json:"runtime"`
+	Rating      int            `json:"rating"`
+	MPAARating  string         `json:"mpaa_rating"`
+	CreatedAt   time.Time      `json:"-"`
+	UpdatedAt   time.Time      `json:"-"`
+	MovieGenre  map[int]string `json:"genres"`
 }
 
+// Genre is the type for genre
 type Genre struct {
-	Id        int       `json:"int"`
+	ID        int       `json:"-"`
 	GenreName string    `json:"genre_name"`
-	CreatedAt time.Time `json:"created_at"`
-	UpdatedAt time.Time `json:"update_at"`
+	CreatedAt time.Time `json:"-"`
+	UpdatedAt time.Time `json:"-"`
 }
 
+// MovieGenre is the type for movie genre
 type MovieGenre struct {
-	Id           int       `json:"id"`
-	MovieId      int       `json:"movie_id"`
-	MovieGenreId int       `json:"movie_genre_id"`
-	Genre        Genre     `json:"genre"`
-	CreatedAt    time.Time `json:"created_at"`
-	UpdatedAt    time.Time `json:"update_at"`
+	ID        int       `json:"-"`
+	MovieID   int       `json:"-"`
+	GenreID   int       `json:"-"`
+	Genre     Genre     `json:"genre"`
+	CreatedAt time.Time `json:"-"`
+	UpdatedAt time.Time `json:"-"`
 }

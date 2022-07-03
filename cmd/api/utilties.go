@@ -11,7 +11,6 @@ func (app *application) writeJSON(w http.ResponseWriter, status int, data interf
 	wrapper[wrap] = data
 
 	js, err := json.Marshal(wrapper)
-
 	if err != nil {
 		return err
 	}

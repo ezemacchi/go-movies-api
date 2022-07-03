@@ -13,7 +13,6 @@ func (app *application) statusHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	js, err := json.MarshalIndent(currentStatus, "", "\t")
-
 	if err != nil {
 		app.logger.Println(err)
 	}
