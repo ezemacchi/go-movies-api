@@ -1,12 +1,11 @@
 package main
 
 import (
-	"context"
-	"database/sql"
 	"flag"
 	"fmt"
 	"log"
 	"movies-api/models"
+	"movies-api/repositories"
 	"net/http"
 	"os"
 	"time"
@@ -30,10 +29,10 @@ type AppStatus struct {
 	Version     string `json:"version"`
 }
 
-type application struct {
-	config config
-	logger *log.Logger
-	models models.Models
+type Application struct {
+	config    config
+	logger    *log.Logger
+	models    models.Models
 }
 
 func main() {
@@ -56,6 +55,7 @@ func main() {
 		config: cfg,
 		logger: logger,
 		models: models.NewModels(db),
+		dbContext: repositories.DbContext.,
 	}
 
 	srv := &http.Server{
@@ -72,21 +72,4 @@ func main() {
 	if err != nil {
 		log.Println(err)
 	}
-}
-
-func openDB(cfg config) (*sql.DB, error) {
-	db, err := sql.Open("postgres", cfg.db.dsn)
-	if err != nil {
-		return nil, err
-	}
-
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-	defer cancel()
-
-	err = db.PingContext(ctx)
-	if err != nil {
-		return nil, err
-	}
-
-	return db, nil
 }
